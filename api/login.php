@@ -1,6 +1,6 @@
 <?php
 
-require_once 'utilities.php';
+require_once 'core.php';
 
 $con = db_connect();
 $name = filter($con, $_REQUEST["name"]);

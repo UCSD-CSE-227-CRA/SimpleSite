@@ -1,6 +1,6 @@
 <?php
 
-require_once 'utilities.php';
+require_once 'core.php';
 
 function contain_special_chars($data) {
     return (preg_match("/[\'.,:;*?~`!@#$%^&+=)(<>{}]|\]|\[|\/|\\\|\"|\|/",$data) > 0);
