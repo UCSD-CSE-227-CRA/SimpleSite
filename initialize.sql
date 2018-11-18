@@ -20,5 +20,6 @@ CREATE TABLE IF NOT EXISTS `session` (
   `secret` CHAR(32) NOT NULL,
   `token` CHAR(32) NOT NULL,
   `userid` INTEGER NOT NULL,
+  `latest_time` TIMESTAMP NOT NULL DEFAULT NOW() ON UPDATE NOW(),
   FOREIGN KEY (`userid`) REFERENCES user(`userid`)
 );
