@@ -2,12 +2,6 @@
 
 require_once 'db_connect.php';
 
-//** Error codes. **//
-define('ERROR_MISSING_PARAMETER', -1);
-define('ERROR_ILLEGAL_PARAMETER', -2);
-define('ERROR_SERVER_ERROR', -3);
-
-
 /**
  * Check login credentials
  * @param mysqli $con Database connection
@@ -33,4 +27,15 @@ function random_string($length = 32) {
         $str .= $str_pol[rand(0, $max)];
     }
     return $str;
+}
+
+/**
+ * Check if a string is a random string
+ * @param string $data The data to be checked
+ * @param int $length The length of the data
+ * @return bool Whether the data is a random string
+ * @see random_string()
+ */
+function is_random_string($data, $length = 32) {
+    return (preg_match("/^[0-9a-zA-Z]{{$length}}$/", $data) > 0);
 }

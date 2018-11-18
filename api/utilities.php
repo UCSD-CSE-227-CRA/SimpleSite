@@ -2,6 +2,11 @@
 
 require_once '../utilities.php';
 
+//** Error codes. **//
+define('ERROR_MISSING_PARAMETER', -1);
+define('ERROR_ILLEGAL_PARAMETER', -2);
+define('ERROR_SERVER_ERROR', -3);
+
 /**
  * Filter and check the data to prevent SQL injection
  * @param mysqli $con Database connection

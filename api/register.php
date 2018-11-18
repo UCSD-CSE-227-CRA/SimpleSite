@@ -17,7 +17,7 @@ $password = filter($con, $_REQUEST["password"], true);
 $sex = filter($con, $_REQUEST["sex"]);
 $email = filter($con, $_REQUEST["email"]);
 
-if (strlen($password) != 32) {
+if (!is_random_string($password, 32)) {
     report_error(ERROR_ILLEGAL_PARAMETER);
 }
 
