@@ -24,7 +24,7 @@ define('SIMPLE_SITE_DB_PASSWORD', 'database_password_here');
 define('SIMPLE_SITE_DB_NAME', 'database_name_here');
 
 /** The database hostname. */
-define('SIMPLE_SITE_DB_HOSTNAME', 'localhost');
+define('SIMPLE_SITE_DB_HOSTNAME', '127.0.0.1');
 
 //** Debug settings. **//
 
