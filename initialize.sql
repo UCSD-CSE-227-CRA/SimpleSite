@@ -26,8 +26,9 @@ CREATE TABLE IF NOT EXISTS `session` (
 
 -- Timer task to delete inactive sessions
 
-CREATE EVENT delete_sessions
+CREATE EVENT `delete_sessions`
 ON SCHEDULE EVERY 1 DAY
+STARTS CONCAT(DATE(NOW() + INTERVAL 1 DAY ), ' 00:00:00')
 ON COMPLETION PRESERVE ENABLE
 DO
-DELETE FROM `session` WHERE latest_time < NOW() - 3600 * 24 * 7;
+DELETE FROM `session` WHERE `latest_time` < NOW() - 3600 * 24 * 7;
