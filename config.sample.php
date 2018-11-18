@@ -29,4 +29,4 @@ define('SIMPLE_SITE_DB_HOSTNAME', 'localhost');
 //** Debug settings. **//
 
 /** Whether server should report errors. */
-define('SIMPLE_SITE_REPORT_ERRORS', false);
+define('SIMPLE_SITE_REPORT_ERRORS', true);
