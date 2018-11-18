@@ -1,12 +1,6 @@
 <?php
 
-require_once '../db_connect.php';
-
-//** Error codes. **//
-define('ERROR_MISSING_PARAMETER', -1);
-define('ERROR_ILLEGAL_PARAMETER', -2);
-define('ERROR_NOT_LOGGED_IN', -3);
-define('ERROR_SERVER_ERROR', -100);
+require_once '../commons.php';
 
 /**
  * Filter and check the data to prevent SQL injection

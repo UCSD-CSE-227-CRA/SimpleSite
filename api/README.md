@@ -38,8 +38,8 @@ These negative code values have fixed meaning:
 
 ### Parameters:
 
-* `name` or `email`: See register section
-* `password`: See register section
+* `name`: User name or email
+* `password`: User password
 
 ### Resturns:
 

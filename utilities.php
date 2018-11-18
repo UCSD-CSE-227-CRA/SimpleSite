@@ -1,14 +1,17 @@
 <?php
 
-require_once 'config.php';
+require_once 'commons.php';
+
+define('SIMPLE_SITE_ROOT_URL', (empty($_SERVER['HTTPS']) ? 'http' : 'https') . "://" . SIMPLE_SITE_ROOT_PATH);
+
+define('SIMPLE_SITE_COOKIE_PREFIX', 'simplesite');
 
 /**
  * Print the HTML head and body label
  * @param string $title
  */
 function print_header($title = "Simple Web") {
-    $protocol = empty($_SERVER['HTTPS']) ? 'http' : 'https';
-    $utilities_path = "${protocol}://" . SIMPLE_SITE_ROOT_URL . "utilities.js";
+    $utilities_path = SIMPLE_SITE_ROOT_URL . "utilities.js";
     echo "<!DOCTYPE html>
 <html>
 <head>
@@ -34,15 +37,16 @@ function print_footer() {
  * Make an POST request to call the API
  * @param $name string API name
  * @param $params array Request additional parameters
- * @param $on_success callable Callback when it succeeds
- * @param $on_error callable Callback when it fails
  * @return array API call result
  */
-function call_api($name, $params = null, $on_success = null, $on_error = null) {
-    $request_params = array_merge($params ? $params : [], $_REQUEST);
+function call_api($name, $params = null) {
+    $request_params = array_merge($params ? $params : [], $_POST);
+    // Strip cookie prefix
+    foreach ($_COOKIE as $key => $value) {
+        $request_params[str_replace(SIMPLE_SITE_COOKIE_PREFIX . '_', '', $key)] = $value;
+    }
 
-    $protocol = empty($_SERVER['HTTPS']) ? 'http' : 'https';
-    $url = "${protocol}://" . SIMPLE_SITE_ROOT_URL . "api/${name}.php";
+    $url = SIMPLE_SITE_ROOT_URL . "api/${name}.php";
 
     $options = array('http' => array(
         'method' => 'POST',
@@ -51,15 +55,51 @@ function call_api($name, $params = null, $on_success = null, $on_error = null) {
     );
     $raw_result = file_get_contents($url, false, stream_context_create($options));
 
-    $result = json_decode($raw_result, true);
+    return json_decode($raw_result, true);
+}
+
+/**
+ * Call func if result is a success API call
+ * @param $result array API call result
+ * @param $func callable Function to be called
+ * @see call_api()
+ */
+function do_when_success($result, $func) {
     if ($result['code'] == 0) {
-        if (is_callable($on_success)) {
-            $on_success($result['data']);
-        }
-    } else {
-        if (is_callable($on_error)) {
-            $on_error($result['code'], $result['message']);
+        if (is_callable($func)) {
+            $func($result['data']);
         }
     }
-    return $result;
+}
+
+/**
+ * Call func if result is a failed API call
+ * @param $result array API call result
+ * @param $func callable Function to be called
+ * @see call_api()
+ */
+function do_when_fail($result, $func) {
+    if ($result['code'] != 0) {
+        if (is_callable($func)) {
+            $func($result['code'], $result['message']);
+        }
+    }
+}
+
+/**
+ * Sets a cookie of the given name with the specified data for the given length of time.
+ * If no time is specified, a session cookie will be set.
+ *
+ * @param string $name Name of the cookie, will be automatically prefixed with SIMPLE_SITE_COOKIE_PREFIX
+ * @param string $cookiedata The data to hold within the cookie
+ * @param int $cookietime The expiration time as UNIX timestamp. If 0 is provided, a session cookie is set.
+ * @param bool $httponly Use HttpOnly. Defaults to true.
+ */
+function set_cookie($name, $cookiedata, $cookietime, $httponly = true) {
+    $name_data = SIMPLE_SITE_COOKIE_PREFIX . '_' . $name . '=' . $cookiedata;
+    $expire = gmdate('D, d-M-Y H:i:s \\G\\M\\T', $cookietime);
+    header('Set-Cookie: ' . $name_data .
+        (($cookietime) ? '; expires=' . $expire : '') . ';' .
+        '; path=/ ;' .
+        (($httponly) ? ' HttpOnly' : ''), false);
 }

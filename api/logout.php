@@ -1,6 +1,6 @@
 <?php
 
-require_once 'core.php';
+require_once 'utilities.php';
 require_once 'auth.php';
 
 $con = db_connect();

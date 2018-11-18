@@ -1,7 +1,6 @@
 <?php
 
-require_once "db_connect.php";
-require_once "utilities.php";
+require_once 'utilities.php';
 
 print_header("Database connection test");
 

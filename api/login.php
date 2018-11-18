@@ -1,26 +1,16 @@
 <?php
 
-require_once 'core.php';
+require_once 'utilities.php';
 
 $con = db_connect();
-$name = filter($con, $_POST["name"]);
-$email = filter($con, $_POST["email"]);
+$name = filter($con, $_POST["name"], true);
 $password = filter($con, $_POST["password"], true);
-
-if (strlen($name) == 0 && strlen($email) == 0) {
-    report_error(ERROR_MISSING_PARAMETER);
-}
 
 if (!is_random_string($password, 32)) {
     report_error(ERROR_ILLEGAL_PARAMETER);
 }
 
-$result = null;
-if (strlen($name) > 0) {
-    $result = $con->query("SELECT * FROM user WHERE name = '$name'");
-} else {
-    $result = $con->query("SELECT * FROM user WHERE email = '$email'");
-}
+$result = $con->query("SELECT * FROM user WHERE name = '$name' or email = '$name'");
 check_sql_error($con);
 if (mysqli_affected_rows($con) == 0) {
     report_error(1, "User name or password incorrect");

@@ -1,6 +1,6 @@
 <?php
 
-require_once 'core.php';
+require_once 'utilities.php';
 
 /**
  * Check login credentials
