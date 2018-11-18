@@ -8,7 +8,7 @@ require_once 'core.php';
  * @return int User ID if logged in, -1 otherwise
  */
 function check_login($con) {
-    $sid = filter($con, $_REQUEST["sid"]);
+    $sid = filter($con, $_POST["sid"]);
     if (strlen($sid) == 0 || !is_random_string($sid, 32)) {
         return -1;
     }

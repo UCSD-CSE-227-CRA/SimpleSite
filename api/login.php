@@ -3,9 +3,9 @@
 require_once 'core.php';
 
 $con = db_connect();
-$name = filter($con, $_REQUEST["name"]);
-$email = filter($con, $_REQUEST["email"]);
-$password = filter($con, $_REQUEST["password"], true);
+$name = filter($con, $_POST["name"]);
+$email = filter($con, $_POST["email"]);
+$password = filter($con, $_POST["password"], true);
 
 if (strlen($name) == 0 && strlen($email) == 0) {
     report_error(ERROR_MISSING_PARAMETER);

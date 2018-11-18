@@ -23,8 +23,8 @@ These negative code values have fixed meaning:
 
 * `name`: User name, length between [3, 32]
 * `password`: MD5 encrypted user password
-* `sex`: Sex, can be 'male', 'female' or empty
-* `email`: Email
+* `sex`: User sex, can be 'male', 'female' or empty
+* `email`: User email
 
 ### Resturns:
 
@@ -58,3 +58,21 @@ These negative code values have fixed meaning:
 ### Resturns:
 
 * Empty
+
+## Get user info
+
+### URL
+
+* `api/user_info.php`
+
+### Parameters:
+
+* `sid`: Session ID
+* `name`: Optional, default to view self
+
+### Resturns:
+
+* `name`: User name
+* `sex`: User sex
+* `email`: User email, only visible when viewing self
+

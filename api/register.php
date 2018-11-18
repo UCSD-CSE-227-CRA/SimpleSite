@@ -12,10 +12,10 @@ function is_email($data) {
 
 $con = db_connect();
 
-$name = filter($con, $_REQUEST["name"], true);
-$password = filter($con, $_REQUEST["password"], true);
-$sex = filter($con, $_REQUEST["sex"]);
-$email = filter($con, $_REQUEST["email"]);
+$name = filter($con, $_POST["name"], true);
+$password = filter($con, $_POST["password"], true);
+$sex = filter($con, $_POST["sex"]);
+$email = filter($con, $_POST["email"]);
 
 if (!is_random_string($password, 32)) {
     report_error(ERROR_ILLEGAL_PARAMETER);
