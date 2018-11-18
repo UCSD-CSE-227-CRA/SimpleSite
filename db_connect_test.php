@@ -1,22 +1,18 @@
-<!DOCTYPE html>
-<html>
+<?php
 
-<head>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
-    <title>Database connection test</title>
-</head>
+require_once "db_connect.php";
+require_once "utilities.php";
 
-<body>
-    <h1 align="center">
-    <?php
-    require_once "db_connect.php";
-    if (!mysqli_error(db_connect())) {
-        echo "Database connection success!";
-    }else {
-        echo "Database connection failed!";
-    }
-    ?>
-    </h1>
-</body>
+print_header("Database connection test");
 
-</html>
+echo "<h1>";
+
+if (!mysqli_error(db_connect())) {
+    echo "Database connection success!";
+}else {
+    echo "Database connection failed!";
+}
+
+echo "</h1>";
+
+print_footer();

@@ -11,6 +11,9 @@
  * Reference:
  * - https://github.com/WordPress/WordPress/blob/master/wp-config-sample.php
  */
+
+//** Server settings. **//
+define('SIMPLE_SITE_ROOT_URL', 'localhost/SimpleSite/');
  
 //** MySQL settings. **//
 
