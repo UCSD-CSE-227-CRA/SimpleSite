@@ -5,12 +5,13 @@ if (!SIMPLE_SITE_REPORT_ERRORS) {
 }
 
 /**
- * Global shared lib for Simple Site.
+ * Config file for Simple Site.
  */
 require_once 'config.php';
 
 /**
  * Database connector.
+ * @return mysqli Database connection
  */
 function db_connect() {
     $con = mysqli_connect(SIMPLE_SITE_DB_HOSTNAME, SIMPLE_SITE_DB_USERNAME, SIMPLE_SITE_DB_PASSWORD, SIMPLE_SITE_DB_NAME)

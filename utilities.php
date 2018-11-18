@@ -5,10 +5,10 @@ require_once 'db_connect.php';
 /**
  * Check login credentials
  * @param mysqli $con Database connection
- * @return bool Whether the user is logged in
+ * @return int User ID if logged in, -1 otherwise
  */
 function check_login($con) {
-    return true;
+    return -1;
 }
 
 /**
@@ -16,7 +16,7 @@ function check_login($con) {
  * @param int $length Length of the random string
  * @return string The generated random string
  */
-function random_string($length = 32) {
+function random_string($length) {
     if ($length <= 0) {
         $length = 1;
     }
@@ -36,6 +36,6 @@ function random_string($length = 32) {
  * @return bool Whether the data is a random string
  * @see random_string()
  */
-function is_random_string($data, $length = 32) {
+function is_random_string($data, $length) {
     return (preg_match("/^[0-9a-zA-Z]{{$length}}$/", $data) > 0);
 }

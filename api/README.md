@@ -27,4 +27,19 @@ These negative code values have fixed meaning:
 
 ### Resturns:
 
-* See login section
+* Empty
+
+## Login
+
+### URL
+
+* `api/login.php`
+
+### Parameters:
+
+* `name` or `email`: See register section
+* `password`: See register section
+
+### Resturns:
+
+* `sid` Session ID, used for future authentication
