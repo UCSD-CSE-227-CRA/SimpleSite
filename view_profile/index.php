@@ -16,7 +16,7 @@ do_when_success($result, function ($data) {
 do_when_fail($result, function ($code, $message) {
     if ($code != ERROR_NOT_LOGGED_IN) {
         error_log("${code}: ${message}");
-
+        echo "<p>${message}</p>";
     } else {
         $main_page = SIMPLE_SITE_ROOT_URL;
         echo "<h1>You're not logged in</h1>";
