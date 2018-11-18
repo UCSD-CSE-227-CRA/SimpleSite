@@ -23,3 +23,11 @@ CREATE TABLE IF NOT EXISTS `session` (
   `latest_time` TIMESTAMP NOT NULL DEFAULT NOW() ON UPDATE NOW(),
   FOREIGN KEY (`userid`) REFERENCES user(`userid`)
 );
+
+-- Timer task to delete inactive sessions
+
+CREATE EVENT delete_sessions
+ON SCHEDULE EVERY 1 DAY
+ON COMPLETION PRESERVE ENABLE
+DO
+DELETE FROM `session` WHERE latest_time < NOW() - 3600 * 24 * 7;
