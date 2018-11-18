@@ -1,12 +1,13 @@
 <?php
-/**
- * Global shared lib for Simple Site.
- */
-require_once 'config.php';
 
 if (!SIMPLE_SITE_REPORT_ERRORS) {
     error_reporting(E_ALL ^ E_NOTICE ^ E_WARNING);
 }
+
+/**
+ * Global shared lib for Simple Site.
+ */
+require_once 'config.php';
 
 /**
  * Database connector.
