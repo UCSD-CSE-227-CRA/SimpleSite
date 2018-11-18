@@ -2,7 +2,7 @@
 
 ## Overall
 
-* All requests should be done via HTTP POST, and the response data is in JSON format
+* All requests should be made via `HTTP POST`, and the response data is in JSON format
 * In response data, field `code` equals 0 means request success, the data is in `data` field
 * Otherwise (`code` != 0) there will be a corresponding `message` field.
 
