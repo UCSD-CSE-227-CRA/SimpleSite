@@ -16,7 +16,7 @@ do_when_fail($result, function ($code, $message) {
 
     } else {
         echo "<h1>You're not logged in</h1>";
-        echo "<a href='login'>Log in</a>";
+        echo "<a href='login'>Log in</a><br />";
         echo "<a href='register'>Register</a>";
     }
 });

@@ -12,12 +12,14 @@ define('SIMPLE_SITE_COOKIE_PREFIX', 'simplesite');
  */
 function print_header($title = "Simple Web") {
     $utilities_path = SIMPLE_SITE_ROOT_URL . "utilities.js";
+    $styles_path = SIMPLE_SITE_ROOT_URL . "styles.css";
     echo "<!DOCTYPE html>
 <html>
 <head>
     <meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\"/>
     <title>${title}</title>
     <script src=${utilities_path}></script>
+    <link rel='stylesheet' href=${styles_path}>
 </head>
 <body>";
 }
