@@ -5,7 +5,8 @@ require_once '../utilities.php';
 //** Error codes. **//
 define('ERROR_MISSING_PARAMETER', -1);
 define('ERROR_ILLEGAL_PARAMETER', -2);
-define('ERROR_SERVER_ERROR', -3);
+define('ERROR_NOT_LOGGED_IN', -3);
+define('ERROR_SERVER_ERROR', -100);
 
 /**
  * Filter and check the data to prevent SQL injection
@@ -53,6 +54,9 @@ function report_error($code, $message = "") {
                 break;
             case ERROR_ILLEGAL_PARAMETER:
                 $message = "Illegal parameter";
+                break;
+            case ERROR_NOT_LOGGED_IN:
+                $message = "Not logged in";
                 break;
             case ERROR_SERVER_ERROR:
                 $message = "Server error";

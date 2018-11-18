@@ -10,7 +10,8 @@ These negative code values have fixed meaning:
 
 * -1: Missing parameter
 * -2: Illegal parameter
-* -3: Server error
+* -3: Not logged in
+* -100: Server error
 
 ## Register
 
@@ -29,7 +30,7 @@ These negative code values have fixed meaning:
 
 * Empty
 
-## Login
+## Log in
 
 ### URL
 
@@ -43,3 +44,17 @@ These negative code values have fixed meaning:
 ### Resturns:
 
 * `sid` Session ID, used for future authentication
+
+## Log out
+
+### URL
+
+* `api/logout.php`
+
+### Parameters:
+
+* `sid`: Session ID
+
+### Resturns:
+
+* Empty
