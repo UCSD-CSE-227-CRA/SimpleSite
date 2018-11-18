@@ -19,7 +19,7 @@ print_header("Log In");
 
 <?php
 $main_page = SIMPLE_SITE_ROOT_URL;
-echo "<a href='${main_page}'>Go Back</a>";
+echo "<a href='${main_page}'>Go back</a>";
 
 print_footer();
 ?>
