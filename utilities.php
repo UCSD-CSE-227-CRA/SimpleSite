@@ -57,11 +57,11 @@ function call_api($name, $params = null) {
 
     $url = url_for_path("api/${name}.php");
 
-    $options = array('http' => array(
+    $options = ['http' => [
         'method' => 'POST',
         'content' => http_build_query($request_params),
-    ),
-    );
+    ],
+    ];
     $raw_result = file_get_contents($url, false, stream_context_create($options));
 
     return json_decode($raw_result, true);

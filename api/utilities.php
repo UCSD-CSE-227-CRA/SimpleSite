@@ -60,7 +60,7 @@ function report_error($code, $message = "") {
                 break;
         }
     }
-    echo json_encode(array("code" => $code, "message" => $message));
+    echo json_encode(["code" => $code, "message" => $message]);
     exit();
 }
 
@@ -69,7 +69,7 @@ function report_error($code, $message = "") {
  * @param mixed $data Data to return
  */
 function report_success($data = null) {
-    echo json_encode(array("code" => 0, "data" => $data));
+    echo json_encode(["code" => 0, "data" => $data]);
 }
 
 /**

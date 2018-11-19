@@ -24,10 +24,10 @@ if (mysqli_affected_rows($con) == 0) {
 }
 
 $result = mysqli_fetch_array($result);
-$return = array(
+$return = [
     "name" => $result["name"],
     "sex" => $result["sex"],
-);
+];
 if ($userid == $result["userid"]) {
     $return["email"] = $result["email"];
 }

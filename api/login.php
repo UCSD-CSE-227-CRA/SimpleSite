@@ -32,4 +32,4 @@ do {
 $con->query("INSERT INTO session (sid, userid, secret, token) VALUES ('$sid', '$userid', 'N/A', 'N/A')");
 check_sql_error($con);
 
-report_success(array("sid" => $sid));
+report_success(["sid" => $sid]);
