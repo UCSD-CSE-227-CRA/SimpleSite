@@ -10,7 +10,6 @@ CREATE TABLE IF NOT EXISTS `user` (
   `sex` VARCHAR(16) NOT NULL,
   `email` VARCHAR(128) NOT NULL,
   `register_time` TIMESTAMP NOT NULL DEFAULT NOW(),
-  `latest_time` TIMESTAMP NOT NULL DEFAULT NOW() ON UPDATE NOW()
 );
 
 -- Table structure for table `session`

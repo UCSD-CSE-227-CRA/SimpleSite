@@ -4,7 +4,7 @@ require_once '../utilities.php';
 $result = call_api("logout");
 
 do_when_success($result, function ($data) {
-    set_cookie('sid', '', time() - 3600);
+    delete_cookie('sid');
 });
 
 print_header("Log Out Result");

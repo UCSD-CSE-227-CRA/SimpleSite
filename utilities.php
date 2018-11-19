@@ -2,7 +2,10 @@
 
 require_once 'commons.php';
 
-define('SIMPLE_SITE_COOKIE_PREFIX', 'simplesite');
+/** Cookie prefix on client browser. No need to change it. */
+define('SIMPLE_SITE_COOKIE_PREFIX', 'simplesite_');
+
+$url_prefix = (empty($_SERVER['HTTPS']) ? 'http' : 'https') . "://" . SIMPLE_SITE_ROOT_URL;
 
 /**
  * Generate the URL for file at a given path
@@ -10,7 +13,7 @@ define('SIMPLE_SITE_COOKIE_PREFIX', 'simplesite');
  * @return string URL
  */
 function url_for_path($path) {
-    return (empty($_SERVER['HTTPS']) ? 'http' : 'https') . "://" . SIMPLE_SITE_ROOT_URL . $path;
+    return $GLOBALS['url_prefix'] . $path;
 }
 
 $urls = [
@@ -60,7 +63,7 @@ function call_api($name, $params = null) {
     $request_params = array_merge($params ? $params : [], $_POST);
     // Strip cookie prefix
     foreach ($_COOKIE as $key => $value) {
-        $request_params[str_replace(SIMPLE_SITE_COOKIE_PREFIX . '_', '', $key)] = $value;
+        $request_params[str_replace(SIMPLE_SITE_COOKIE_PREFIX, '', $key)] = $value;
     }
 
     $url = url_for_path("api/${name}.php");
@@ -104,19 +107,25 @@ function do_when_fail($result, $func) {
 }
 
 /**
- * Sets a cookie of the given name with the specified data for the given length of time.
- * If no time is specified, a session cookie will be set.
+ * Wrapper function of PHP setcookie() to set a cookie
  *
  * @param string $name Name of the cookie, will be automatically prefixed with SIMPLE_SITE_COOKIE_PREFIX
- * @param string $cookiedata The data to hold within the cookie
- * @param int $cookietime The expiration time as UNIX timestamp. If 0 is provided, a session cookie is set.
+ * @param string $value Value of the cookie
+ * @param int $expire The expiration time as UNIX timestamp.
  * @param bool $httponly Use HttpOnly. Defaults to true.
+ * @see setcookie()
  */
-function set_cookie($name, $cookiedata, $cookietime, $httponly = true) {
-    $name_data = SIMPLE_SITE_COOKIE_PREFIX . '_' . $name . '=' . $cookiedata;
-    $expire = gmdate('D, d-M-Y H:i:s \\G\\M\\T', $cookietime);
-    header('Set-Cookie: ' . $name_data .
-        (($cookietime) ? '; expires=' . $expire : '') . ';' .
-        '; path=/ ;' .
-        (($httponly) ? ' HttpOnly' : ''), false);
+function set_cookie($name, $value, $expire, $httponly = true) {
+    $real_name = SIMPLE_SITE_COOKIE_PREFIX . $name;
+    setcookie($real_name, $value, $expire, '/', null, null, $httponly);
+}
+
+/**
+ * Delete a cookie
+ *
+ * @param string $name Name of the cookie
+ * @see set_cookie()
+ */
+function delete_cookie($name) {
+    set_cookie($name, '', time() - 3600);
 }
