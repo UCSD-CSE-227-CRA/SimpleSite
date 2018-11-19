@@ -63,9 +63,11 @@ function call_api($name, $params = null) {
     $request_params = array_merge($params ? $params : [], $_POST);
     // Strip cookie prefix
     foreach ($_COOKIE as $key => $value) {
-        $request_params[str_replace(SIMPLE_SITE_COOKIE_PREFIX, '', $key)] = $value;
+        if (preg_match("/^" . SIMPLE_SITE_COOKIE_PREFIX . "/", $key)) {
+            $request_params[str_replace(SIMPLE_SITE_COOKIE_PREFIX, '', $key)] = $value;
+        }
     }
-
+    
     $url = url_for_path("api/${name}.php");
 
     $options = ['http' => [
