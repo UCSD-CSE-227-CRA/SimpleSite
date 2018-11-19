@@ -2,21 +2,28 @@
 
 require_once 'commons.php';
 
-define('SIMPLE_SITE_ROOT_URL', (empty($_SERVER['HTTPS']) ? 'http' : 'https') . "://" . SIMPLE_SITE_ROOT_PATH);
-
 define('SIMPLE_SITE_COOKIE_PREFIX', 'simplesite');
+
+/**
+ * Generate the URL for file at a given path
+ * @param $path string file path relative to server root
+ * @return string URL
+ */
+function url_for_path($path) {
+    return (empty($_SERVER['HTTPS']) ? 'http' : 'https') . "://" . SIMPLE_SITE_ROOT_URL . $path;
+}
 
 /**
  * Print the HTML head and body label
  * @param string $title
  */
 function print_header($title = "Simple Web") {
-    $utilities_path = SIMPLE_SITE_ROOT_URL . "utilities.js";
-    $styles_path = SIMPLE_SITE_ROOT_URL . "styles.css";
+    $utilities_path = url_for_path("utilities.js");
+    $styles_path = url_for_path("styles.css");
     echo "<!DOCTYPE html>
 <html>
 <head>
-    <meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\"/>
+    <meta http-equiv='Content-Type' content='text/html; charset=UTF-8'/>
     <title>${title}</title>
     <script src=${utilities_path}></script>
     <link rel='stylesheet' href=${styles_path}>
@@ -48,7 +55,7 @@ function call_api($name, $params = null) {
         $request_params[str_replace(SIMPLE_SITE_COOKIE_PREFIX . '_', '', $key)] = $value;
     }
 
-    $url = SIMPLE_SITE_ROOT_URL . "api/${name}.php";
+    $url = url_for_path("api/${name}.php");
 
     $options = array('http' => array(
         'method' => 'POST',

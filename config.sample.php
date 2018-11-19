@@ -14,8 +14,8 @@
 
 //** Server settings. **//
 
-/** The server root path */
-define('SIMPLE_SITE_ROOT_PATH', 'localhost/SimpleSite/');
+/** The server root URL */
+define('SIMPLE_SITE_ROOT_URL', 'localhost/SimpleSite/');
  
 //** MySQL settings. **//
 

@@ -6,7 +6,7 @@ print_header("View Profile");
 $result = call_api("user_info");
 
 do_when_success($result, function ($data) {
-    $main_page = SIMPLE_SITE_ROOT_URL;
+    $main_page = url_for_path('');
     echo "<p>User name: ${data['name']}</p>";
     echo "<p>Sex: ${data['sex']}</p>";
     echo "<p>Email: ${data['email']}</p>";
@@ -18,7 +18,7 @@ do_when_fail($result, function ($code, $message) {
         error_log("${code}: ${message}");
         echo "<p>${message}</p>";
     } else {
-        $main_page = SIMPLE_SITE_ROOT_URL;
+        $main_page = url_for_path('');
         echo "<h1>You're not logged in</h1>";
         echo "<a href='${main_page}'>Go back</a>";
     }

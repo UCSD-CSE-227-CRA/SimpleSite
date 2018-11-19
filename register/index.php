@@ -24,7 +24,7 @@ print_header("Register");
 </form>
 
 <?php
-$main_page = SIMPLE_SITE_ROOT_URL;
+$main_page = url_for_path('');
 echo "<a href='${main_page}'>Go back</a>";
 
 print_footer();

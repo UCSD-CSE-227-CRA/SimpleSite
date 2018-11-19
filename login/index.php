@@ -18,7 +18,7 @@ print_header("Log In");
 </form>
 
 <?php
-$main_page = SIMPLE_SITE_ROOT_URL;
+$main_page = url_for_path('');
 echo "<a href='${main_page}'>Go back</a>";
 
 print_footer();
