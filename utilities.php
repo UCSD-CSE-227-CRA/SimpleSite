@@ -13,6 +13,14 @@ function url_for_path($path) {
     return (empty($_SERVER['HTTPS']) ? 'http' : 'https') . "://" . SIMPLE_SITE_ROOT_URL . $path;
 }
 
+$urls = [
+    'main' => url_for_path(''),
+    'register' => url_for_path('register'),
+    'login' => url_for_path('login'),
+    'logout' => url_for_path('logout'),
+    'view_profile' => url_for_path('view_profile'),
+];
+
 /**
  * Print the HTML head and body label
  * @param string $title

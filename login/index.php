@@ -18,8 +18,9 @@ print_header("Log In");
 </form>
 
 <?php
-$main_page = url_for_path('');
-echo "<a href='${main_page}'>Go back</a>";
+global $urls;
+
+echo "<a href='${urls['main']}'>Go back</a>";
 
 print_footer();
 ?>

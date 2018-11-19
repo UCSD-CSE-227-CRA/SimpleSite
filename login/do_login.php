@@ -10,16 +10,18 @@ do_when_success($result, function ($data) {
 print_header("Log In Result");
 
 do_when_success($result, function () {
-    $main_page = url_for_path('');
+    global $urls;
+
     echo "<h1>Login Success!</h1>";
-    echo "<a href='${main_page}'>Go back</a>";
+    echo "<a href='${urls['main']}'>Go back</a>";
 });
 
 do_when_fail($result, function ($code, $message) {
-    $login_page = url_for_path("login");
+    global $urls;
+
     echo "<h1>Login Failed!</h1>";
     echo "<p>${message}</p>";
-    echo "<a href='${login_page}'>Go back</a>";
+    echo "<a href='${urls['login']}'>Go back</a>";
 });
 
 print_footer();
