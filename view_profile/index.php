@@ -1,9 +1,9 @@
 <?php
 require_once '../utilities.php';
 
-print_header("View Profile");
-
 $result = call_api("user_info");
+
+print_header("View Profile");
 
 do_when_success($result, function ($data) {
     global $urls;

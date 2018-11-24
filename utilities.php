@@ -30,6 +30,7 @@ $urls = [
  */
 function print_header($title = "Simple Web") {
     $utilities_path = url_for_path("utilities.js");
+    $auth_path = url_for_path("auth.js");
     $styles_path = url_for_path("styles.css");
     echo "<!DOCTYPE html>
 <html>
@@ -37,11 +38,11 @@ function print_header($title = "Simple Web") {
     <meta http-equiv='Content-Type' content='text/html; charset=UTF-8'/>
     <title>${title}</title>
     <script src=${utilities_path}></script>
+    <script src=${auth_path}></script>
     <link rel='stylesheet' href=${styles_path}>
 </head>
 <body>";
 }
-
 
 /**
  * Complete the HTML document
@@ -55,6 +56,7 @@ function print_footer() {
 
 /**
  * Make an POST request to call the API
+ * Since this function might set the cookie header, it should be called before printing anything
  * @param $name string API name
  * @param $params array Request additional parameters
  * @return array API call result
@@ -63,11 +65,11 @@ function call_api($name, $params = null) {
     $request_params = array_merge($params ? $params : [], $_POST);
     // Strip cookie prefix
     foreach ($_COOKIE as $key => $value) {
-        if (preg_match("/^" . SIMPLE_SITE_COOKIE_PREFIX . "/", $key)) {
+        if (preg_match('/^' . SIMPLE_SITE_COOKIE_PREFIX . '/', $key)) {
             $request_params[str_replace(SIMPLE_SITE_COOKIE_PREFIX, '', $key)] = $value;
         }
     }
-    
+
     $url = url_for_path("api/${name}.php");
 
     $options = ['http' => [
@@ -77,7 +79,13 @@ function call_api($name, $params = null) {
     ];
     $raw_result = file_get_contents($url, false, stream_context_create($options));
 
-    return json_decode($raw_result, true);
+    $result = json_decode($raw_result, true);
+    do_when_success($result, function ($data) {
+        if ($data['raw_token']) {
+            set_cookie('raw_token', $data['raw_token'], 0, false);
+        }
+    });
+    return $result;
 }
 
 /**
