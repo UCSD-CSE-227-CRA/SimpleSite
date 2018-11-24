@@ -2,14 +2,14 @@
  * Update the next token according to raw token and secret
  */
 function update_token(cookie) {
-    let cookie_prefix = localStorage.getItem("cookie_prefix");
-    let secret = localStorage.getItem("secret");
+    let cookie_prefix = localStorage.getItem("simple_site_cookie_prefix");
+    let secret = localStorage.getItem("simple_site_secret");
     const secret_matches = new RegExp("([0-9a-zA-Z_]+)secret=([0-9a-zA-Z]+)").exec(cookie);
     if (secret_matches !== null) {
         cookie_prefix = secret_matches[1];
         secret = secret_matches[2];
-        localStorage.setItem("cookie_prefix", cookie_prefix);
-        localStorage.setItem("secret", secret);
+        localStorage.setItem("simple_site_cookie_prefix", cookie_prefix);
+        localStorage.setItem("simple_site_secret", secret);
         invalidate_cookie(cookie_prefix + "secret");
     } else if (secret === null) {
         console.log("No secret found, user not logged in");
