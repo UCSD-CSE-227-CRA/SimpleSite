@@ -44,8 +44,8 @@ These negative code values have fixed meaning:
 
 ### Returns:
 
-* `sid` Session ID, used for future authentication
-* `secret` & `raw_token` Session secret and raw token. Set `token = MD5(secret + raw_token)` for future authentication
+* `sid`: Session ID, used for future authentication
+* `secret` & `raw_token`: Session secret and raw token. Set `token = MD5(secret + raw_token)` for future authentication
 
 ## Log out
 
@@ -77,4 +77,3 @@ These negative code values have fixed meaning:
 * `name`: User name
 * `sex`: User sex
 * `email`: User email, only visible when viewing self
-
