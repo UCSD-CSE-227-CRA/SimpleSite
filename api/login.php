@@ -23,13 +23,17 @@ if (md5_password($password, $result["salt"]) != strtoupper($result["password"]))
 
 $sid = null;
 $userid = $result["userid"];
+$raw_token = random_string(32);
+$secret = random_string(32);
+$token = md5($secret . $raw_token);
 do {
     $sid = random_string(32);
     $con->query("SELECT * FROM session WHERE sid = '$sid'");
     check_sql_error($con);
 } while (mysqli_affected_rows($con) > 0);
 
-$con->query("INSERT INTO session (sid, userid, secret, token) VALUES ('$sid', '$userid', 'N/A', 'N/A')");
+$con->query("INSERT INTO session (sid, userid, secret, token) VALUES ('$sid', '$userid', '$secret', '$token')");
 check_sql_error($con);
 
-report_success(["sid" => $sid]);
+$GLOBALS['raw_token'] = $raw_token;
+report_success(["sid" => $sid, "secret" => $secret]);

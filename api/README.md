@@ -4,7 +4,8 @@
 
 * All requests should be made via `HTTP POST`, and the response data is in JSON format
 * In response data, field `code` equals 0 means request success, the data is in `data` field
-* Otherwise (`code` != 0) there will be a corresponding `message` field.
+* In data field, if user is logged in, there will always be a `raw_token` field, see log in section
+* Otherwise (`code` != 0) there will be a corresponding `message` field
 
 These negative code values have fixed meaning:
 
@@ -26,7 +27,7 @@ These negative code values have fixed meaning:
 * `sex`: User sex, can be 'male', 'female' or empty
 * `email`: User email
 
-### Resturns:
+### Returns:
 
 * Empty
 
@@ -41,9 +42,10 @@ These negative code values have fixed meaning:
 * `name`: User name or email
 * `password`: User password
 
-### Resturns:
+### Returns:
 
 * `sid` Session ID, used for future authentication
+* `secret` & `raw_token` Session secret and raw token. Set `token = MD5(secret + raw_token)` for future authentication
 
 ## Log out
 
@@ -53,9 +55,9 @@ These negative code values have fixed meaning:
 
 ### Parameters:
 
-* `sid`: Session ID
+* `sid` & `token`: Session ID and token, see log in section
 
-### Resturns:
+### Returns:
 
 * Empty
 
@@ -67,10 +69,10 @@ These negative code values have fixed meaning:
 
 ### Parameters:
 
-* `sid`: Session ID
+* `sid` & `token`: Session ID and token, see log in section
 * `name`: Optional, default to view self
 
-### Resturns:
+### Returns:
 
 * `name`: User name
 * `sex`: User sex

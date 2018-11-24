@@ -65,10 +65,15 @@ function report_error($code, $message = "") {
 }
 
 /**
- * Report success message and data to the client
- * @param mixed $data Data to return
+ * Report success message and data to the client, add raw token if present
+ * @param array $data Data to return
  */
 function report_success($data = null) {
+    $data = $data ? $data : [];
+    $raw_token = $GLOBALS['raw_token'];
+    if (strlen($raw_token) > 0) {
+        $data = array_merge($data, ['raw_token' => $raw_token]);
+    }
     echo json_encode(["code" => 0, "data" => $data]);
 }
 
