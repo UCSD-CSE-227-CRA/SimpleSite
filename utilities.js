@@ -177,6 +177,6 @@ function set_cookie(name, value) {
  * Invalidate the cookie with the given name
  * @param name Cookie name
  */
-function invalidate_cookie(name) {
+function delete_cookie(name) {
     document.cookie = name + "=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/;";
 }

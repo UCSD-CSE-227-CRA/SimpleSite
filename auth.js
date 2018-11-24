@@ -10,7 +10,7 @@ function update_token(cookie) {
         secret = secret_matches[2];
         localStorage.setItem("simple_site_cookie_prefix", cookie_prefix);
         localStorage.setItem("simple_site_secret", secret);
-        invalidate_cookie(cookie_prefix + "secret");
+        delete_cookie(cookie_prefix + "secret");
     } else if (secret === null) {
         console.log("No secret found, user not logged in");
     }
@@ -19,7 +19,7 @@ function update_token(cookie) {
         const raw_token_matches = new RegExp(cookie_prefix + "raw_token=([0-9a-zA-Z]+)").exec(cookie);
         if (raw_token_matches !== null) {
             const raw_token = raw_token_matches[1];
-            invalidate_cookie(cookie_prefix + "raw_token");
+            delete_cookie(cookie_prefix + "raw_token");
             set_cookie(cookie_prefix + "token", md5(secret + raw_token));
         } else {
             const token_matches = new RegExp(cookie_prefix + "token=([0-9a-zA-Z]+)").exec(cookie);
