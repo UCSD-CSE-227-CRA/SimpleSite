@@ -1,5 +1,7 @@
 /**
  * Take a string and return the hex representation of its MD5.
+ * @param str Input string
+ * @returns MD5 hex result
  */
 function md5(str) {
     /**
@@ -160,4 +162,21 @@ function md5(str) {
         d = add(d, oldd);
     }
     return rhex(a) + rhex(b) + rhex(c) + rhex(d);
+}
+
+/**
+ * Set a cookie with the given name and value
+ * @param name Cookie name
+ * @param value Cookie value
+ */
+function set_cookie(name, value) {
+    document.cookie = name + "=" + value + "; path=/;";
+}
+
+/**
+ * Invalidate the cookie with the given name
+ * @param name Cookie name
+ */
+function invalidate_cookie(name) {
+    document.cookie = name + "=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/;";
 }

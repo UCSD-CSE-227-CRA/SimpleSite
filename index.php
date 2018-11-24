@@ -1,9 +1,9 @@
 <?php
 require_once 'utilities.php';
 
-print_header("Simple Web");
-
 $result = call_api("user_info");
+
+print_header("Simple Web");
 
 do_when_success($result, function ($data) {
     global $urls;
