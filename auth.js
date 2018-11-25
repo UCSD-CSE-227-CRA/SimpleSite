@@ -30,12 +30,4 @@ function update_token(cookie) {
     }
 }
 
-let current_cookie = document.cookie;
-update_token(current_cookie);
-// Loop forever to listen to cookie changes
-setInterval(function () {
-    if (current_cookie !== document.cookie) {
-        current_cookie = document.cookie;
-        update_token(current_cookie);
-    }
-}, 100);
+update_token(document.cookie);
