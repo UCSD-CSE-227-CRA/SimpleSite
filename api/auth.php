@@ -18,17 +18,21 @@ function check_login($con) {
     check_sql_error($con);
     if (mysqli_affected_rows($con) > 0) {
         $result = mysqli_fetch_array($result);
-        refresh_token($con, $result);
+        refresh_token($con, $result['sid'], $result['secret']);
         return $result["userid"];
     } else {
         return -1;
     }
 }
 
-function refresh_token($con, $result) {
-    $sid = $result["sid"];
+/**
+ * @param mysqli $con Database connection
+ * @param string $sid Session ID
+ * @param string $secret Session secret
+ */
+function refresh_token($con, $sid, $secret) {
     $raw_token = random_string(32);
-    $token = md5($result["secret"] . $raw_token);
+    $token = md5($secret. $raw_token);
     $con->query("UPDATE session SET token = '$token' WHERE sid = '$sid'");
     check_sql_error($con);
     $GLOBALS['raw_token'] = $raw_token;
