@@ -30,5 +30,6 @@ function refresh_token($con, $result) {
     $raw_token = random_string(32);
     $token = md5($result["secret"] . $raw_token);
     $con->query("UPDATE session SET token = '$token' WHERE sid = '$sid'");
+    check_sql_error($con);
     $GLOBALS['raw_token'] = $raw_token;
 }
