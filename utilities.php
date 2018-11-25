@@ -39,6 +39,7 @@ function print_header($title = "Simple Web") {
     <title>${title}</title>
     <script src=${utilities_path}></script>
     <script src=${auth_path}></script>
+    <script>update_token(document.cookie)</script>
     <link rel='stylesheet' href=${styles_path}>
 </head>
 <body>";

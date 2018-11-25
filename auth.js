@@ -30,4 +30,12 @@ function update_token(cookie) {
     }
 }
 
-update_token(document.cookie);
+/**
+ * Delete cookie and local storage related to authentication. Use to log out
+ */
+function delete_token() {
+    let cookie_prefix = localStorage.getItem("simple_site_cookie_prefix");
+    localStorage.removeItem("simple_site_cookie_prefix");
+    localStorage.removeItem("simple_site_secret");
+    delete_cookie(cookie_prefix + "token");
+}

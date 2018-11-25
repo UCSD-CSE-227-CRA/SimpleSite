@@ -14,6 +14,7 @@ do_when_success($result, function () {
 
     echo "<h1>Logout Success!</h1>";
     echo "<a href='${urls['main']}'>Go back</a>";
+    echo "<script>delete_token()</script>";
 });
 
 do_when_fail($result, function ($code, $message) {
