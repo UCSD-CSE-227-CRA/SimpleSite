@@ -5,7 +5,7 @@ require_once 'commons.php';
 /** Cookie prefix on client browser. No need to change it. */
 define('SIMPLE_SITE_COOKIE_PREFIX', 'simplesite_');
 
-$url_prefix = (empty($_SERVER['HTTPS']) ? 'http' : 'https') . "://" . SIMPLE_SITE_ROOT_URL;
+$GLOBALS['url_prefix'] = (empty($_SERVER['HTTPS']) ? 'http' : 'https') . "://" . SIMPLE_SITE_ROOT_URL;
 
 /**
  * Generate the URL for file at a given path
@@ -16,7 +16,7 @@ function url_for_path($path) {
     return $GLOBALS['url_prefix'] . $path;
 }
 
-$urls = [
+$GLOBALS['urls'] = [
     'main' => url_for_path(''),
     'register' => url_for_path('register'),
     'login' => url_for_path('login'),
