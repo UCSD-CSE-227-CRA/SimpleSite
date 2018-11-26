@@ -26,6 +26,7 @@ function check_login($con) {
 }
 
 /**
+ * Generate a new session token according to session secret
  * @param mysqli $con Database connection
  * @param string $sid Session ID
  * @param string $secret Session secret
