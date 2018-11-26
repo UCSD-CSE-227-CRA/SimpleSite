@@ -2,14 +2,14 @@
  * Update the next token according to raw token and secret
  */
 function update_token() {
-    let cookie_prefix = localStorage.getItem("simple_site_cookie_prefix");
-    let secret = localStorage.getItem("simple_site_secret");
+    let cookie_prefix = localStorage.getItem("simplesite_cookie_prefix");
+    let secret = localStorage.getItem("simplesite_secret");
     const secret_matches = new RegExp("([0-9a-zA-Z_]+)secret=([0-9a-zA-Z]+)").exec(document.cookie);
     if (secret_matches !== null) {
         cookie_prefix = secret_matches[1];
         secret = secret_matches[2];
-        localStorage.setItem("simple_site_cookie_prefix", cookie_prefix);
-        localStorage.setItem("simple_site_secret", secret);
+        localStorage.setItem("simplesite_cookie_prefix", cookie_prefix);
+        localStorage.setItem("simplesite_secret", secret);
         delete_cookie(cookie_prefix + "secret");
     } else if (secret === null) {
         console.log("No secret found, user not logged in");
@@ -34,8 +34,8 @@ function update_token() {
  * Delete cookie and local storage related to authentication. Use to log out
  */
 function delete_token() {
-    let cookie_prefix = localStorage.getItem("simple_site_cookie_prefix");
-    localStorage.removeItem("simple_site_cookie_prefix");
-    localStorage.removeItem("simple_site_secret");
+    let cookie_prefix = localStorage.getItem("simplesite_cookie_prefix");
+    localStorage.removeItem("simplesite_cookie_prefix");
+    localStorage.removeItem("simplesite_secret");
     delete_cookie(cookie_prefix + "token");
 }
