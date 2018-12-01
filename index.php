@@ -1,7 +1,7 @@
 <?php
 require_once 'utilities.php';
 
-$result = call_api("user_info");
+$result = call_api("view_profile");
 
 print_header("Simple Web");
 
