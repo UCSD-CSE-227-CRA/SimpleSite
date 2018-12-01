@@ -186,7 +186,7 @@ function set_not_logged_in() {
  * Update the next token according to raw token and secret
  */
 function update_token() {
-    function set_new_token(secret) {
+    function renew_token(secret) {
         chrome.cookies.get({url: root_url, name: cookie_prefix + "raw_token"}, function (cookie) {
             if (cookie) {
                 const raw_token = cookie.value;
@@ -202,18 +202,17 @@ function update_token() {
 
     chrome.cookies.get({url: root_url, name: cookie_prefix + "secret"}, function (cookie) {
         if (cookie) {
-            chrome.storage.local.set({secret: cookie.value});
+            localStorage.setItem("secret", cookie.value);
             chrome.cookies.remove({url: root_url, name: cookie_prefix + "secret"});
-            set_new_token(cookie.value);
+            renew_token(cookie.value);
         } else {
-            chrome.storage.local.get("secret", function (result) {
-                if (result) {
-                    set_new_token(result.secret);
-                } else {
-                    set_not_logged_in();
-                    console.log("No secret found, user not logged in");
-                }
-            });
+            const secret = localStorage.getItem("secret");
+            if (secret) {
+                renew_token(secret);
+            } else {
+                set_not_logged_in();
+                console.log("No secret found, user not logged in");
+            }
         }
     });
 }
@@ -222,7 +221,7 @@ function update_token() {
  * Delete cookie and local storage related to authentication. Use to log out
  */
 function delete_token() {
-    chrome.storage.local.remove("secret");
+    localStorage.removeItem("secret");
     chrome.cookies.remove({url: root_url, name: cookie_prefix + "token"});
     set_not_logged_in();
 }
@@ -237,5 +236,16 @@ chrome.webRequest.onCompleted.addListener(function () {
     });
 }, {
     urls: [root_url + "/*"],
-    types: ['main_frame']
+    types: ["main_frame"]
 });
+
+chrome.webRequest.onBeforeSendHeaders.addListener(function(details) {
+    const secret = localStorage.getItem("secret");
+    if (secret) {
+        details.requestHeaders.push({name: "URL-Encrypted", value: md5(secret + details.url)});
+    }
+    return {requestHeaders: details.requestHeaders};
+}, {
+    urls: [root_url + "/*"],
+    types: ["main_frame"]
+}, ["blocking", "requestHeaders"]);

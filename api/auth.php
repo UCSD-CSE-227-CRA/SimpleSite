@@ -10,7 +10,10 @@ require_once 'utilities.php';
 function check_login($con) {
     $sid = filter($con, $_POST["sid"]);
     $token = filter($con, $_POST["token"]);
-    if (strlen($sid) == 0 || !is_random_string($sid, 32) || !is_random_string($token, 32)) {
+    $info = filter($con, $_POST["info"]);
+    $info_encrypted = filter($con, $_POST["info_encrypted"]);
+    if (strlen($sid) == 0 || !is_random_string($sid, 32) || !is_random_string($token, 32) ||
+        (strlen($info) > 0 && !is_random_string($info_encrypted, 32))) {
         return -1;
     }
 
@@ -18,7 +21,11 @@ function check_login($con) {
     check_sql_error($con);
     if (mysqli_affected_rows($con) > 0) {
         $result = mysqli_fetch_array($result);
-        refresh_token($con, $result['sid'], $result['secret']);
+        $secret = $result['secret'];
+        if (strlen($info) > 0 && md5($secret . $info) != $info_encrypted) {
+            return -1;
+        }
+        refresh_token($con, $result['sid'], $secret);
         return $result["userid"];
     } else {
         return -1;
@@ -33,7 +40,7 @@ function check_login($con) {
  */
 function refresh_token($con, $sid, $secret) {
     $raw_token = random_string(32);
-    $token = md5($secret. $raw_token);
+    $token = md5($secret . $raw_token);
     $con->query("UPDATE session SET token = '$token' WHERE sid = '$sid'");
     check_sql_error($con);
     $GLOBALS['raw_token'] = $raw_token;

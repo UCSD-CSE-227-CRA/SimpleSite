@@ -61,11 +61,17 @@ function print_footer() {
  */
 function call_api($name, $params = null) {
     $request_params = array_merge($params ? $params : [], $_POST);
+
     // Strip cookie prefix
     foreach ($_COOKIE as $key => $value) {
         if (preg_match('/^' . SIMPLE_SITE_COOKIE_PREFIX . '/', $key)) {
             $request_params[str_replace(SIMPLE_SITE_COOKIE_PREFIX, '', $key)] = $value;
         }
+    }
+    // Add encrypted url for authentication
+    if (strlen($request_params["sid"]) > 0) {
+        $request_params["info"] = (empty($_SERVER['HTTPS']) ? 'http' : 'https') . "://" . $_SERVER["HTTP_HOST"] . $_SERVER["REQUEST_URI"];
+        $request_params["info_encrypted"] = getallheaders()['URL-Encrypted'];
     }
 
     $url = url_for_path("api/${name}.php");

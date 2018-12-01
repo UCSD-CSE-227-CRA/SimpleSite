@@ -45,7 +45,9 @@ These negative code values have fixed meaning:
 ### Returns:
 
 * `sid`: Session ID, used for future authentication
-* `secret` & `raw_token`: Session secret and raw token. Set `token = MD5(secret + raw_token)` for future authentication
+* `secret` & `raw_token`: Session secret and raw token. In the future:
+    * Set `token = MD5(secret + raw_token)` for authentication
+    * Set `info_encrypted = MD5(secret + info)` for optional authentication
 
 ## Log out
 
@@ -61,11 +63,11 @@ These negative code values have fixed meaning:
 
 * Empty
 
-## Get user info
+## View user profile
 
 ### URL
 
-* `api/user_info.php`
+* `api/view_profile.php`
 
 ### Parameters:
 

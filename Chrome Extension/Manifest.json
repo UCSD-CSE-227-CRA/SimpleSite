@@ -3,11 +3,10 @@
   "version":"1.0",
   "description":"Secure your login credentials",
   "permissions":[
-    "declarativeContent",
     "webRequest",
+    "webRequestBlocking",
     "cookies",
-    "storage",
-    "http://localhost"
+    "http://localhost/"
   ],
   "background":{
     "scripts":[
