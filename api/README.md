@@ -47,7 +47,7 @@ These negative code values have fixed meaning:
 * `sid`: Session ID, used for future authentication
 * `secret` & `raw_token`: Session secret and raw token. In the future:
     * Set `token = MD5(secret + raw_token)` for authentication
-    * Set `info_encrypted = MD5(secret + info)` for optional authentication
+    * Set `info_encrypted = MD5(secret + token + info)` for authentication
 
 ## Log out
 

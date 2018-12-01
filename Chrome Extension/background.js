@@ -197,6 +197,8 @@ function update_token() {
             if (cookie) {
                 const raw_token = cookie.value;
                 chrome.cookies.remove({url: root_url, name: cookie_prefix + "raw_token"});
+                const token = md5(secret + raw_token);
+                localStorage.setItem("token", token);
                 chrome.cookies.set({url: root_url, name: cookie_prefix + "token", value: md5(secret + raw_token)});
                 set_logged_in();
             } else {
@@ -249,8 +251,9 @@ chrome.webRequest.onCompleted.addListener(function () {
 // Hash the URL and put it in header for better defense against MITM attack
 chrome.webRequest.onBeforeSendHeaders.addListener(function(details) {
     const secret = localStorage.getItem("secret");
-    if (secret) {
-        details.requestHeaders.push({name: "URL-Encrypted", value: md5(secret + details.url)});
+    const token = localStorage.getItem("token");
+    if (secret && token) {
+        details.requestHeaders.push({name: "URL-Encrypted", value: md5(secret + token + details.url)});
     }
     return {requestHeaders: details.requestHeaders};
 }, {

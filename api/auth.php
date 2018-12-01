@@ -12,8 +12,8 @@ function check_login($con) {
     $token = filter($con, $_POST["token"]);
     $info = filter($con, $_POST["info"]);
     $info_encrypted = filter($con, $_POST["info_encrypted"]);
-    if (strlen($sid) == 0 || !is_random_string($sid, 32) || !is_random_string($token, 32) ||
-        (strlen($info) > 0 && !is_random_string($info_encrypted, 32))) {
+    if (strlen($sid) == 0 || !is_random_string($sid, 32) || !is_random_string($token, 32)
+        || strlen($info) == 0 || !is_random_string($info_encrypted, 32) || $info_encrypted === $token) {
         return -1;
     }
 
@@ -22,7 +22,7 @@ function check_login($con) {
     if (mysqli_affected_rows($con) > 0) {
         $result = mysqli_fetch_array($result);
         $secret = $result['secret'];
-        if (strlen($info) > 0 && md5($secret . $info) != $info_encrypted) {
+        if (md5($secret . $token . $info) != $info_encrypted) {
             return -1;
         }
         refresh_token($con, $result['sid'], $secret);
