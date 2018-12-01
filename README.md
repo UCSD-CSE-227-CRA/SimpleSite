@@ -25,5 +25,7 @@ A simple website to demonstrate defense methods against cookie replay attack
   
 * In root directory, copy `config.sample.php` as `config.php`
 * Modify `config.php`, add root URL, MySQL \`databasename\`, \`username\` and \`password\`
+* Also modify the root URL in `Chrome Extension/config.js` and `Chrome Extension/Manifest.json`
 * Run `db_connect_test.php` in the browser to check database configuration
+* Install the Chrome Extension ([Instructions](https://developer.chrome.com/extensions/getstarted))
 * You're all set!

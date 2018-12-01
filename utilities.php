@@ -30,7 +30,6 @@ $GLOBALS['urls'] = [
  */
 function print_header($title = "Simple Web") {
     $utilities_path = url_for_path("utilities.js");
-    $auth_path = url_for_path("auth.js");
     $styles_path = url_for_path("styles.css");
     echo "<!DOCTYPE html>
 <html>
@@ -38,8 +37,6 @@ function print_header($title = "Simple Web") {
     <meta http-equiv='Content-Type' content='text/html; charset=UTF-8'/>
     <title>${title}</title>
     <script src=${utilities_path}></script>
-    <script src=${auth_path}></script>
-    <script>update_token()</script>
     <link rel='stylesheet' href=${styles_path}>
 </head>
 <body>";
@@ -83,7 +80,7 @@ function call_api($name, $params = null) {
     $result = json_decode($raw_result, true);
     do_when_success($result, function ($data) {
         if ($data['raw_token']) {
-            set_cookie('raw_token', $data['raw_token'], 0, false);
+            set_cookie('raw_token', $data['raw_token'], 0);
         }
     });
     return $result;
