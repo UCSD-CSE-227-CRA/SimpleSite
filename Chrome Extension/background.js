@@ -166,6 +166,9 @@ function md5(str) {
 
 let logged_in = false;
 
+/**
+ * Set the extension's state as logged in
+ */
 function set_logged_in() {
     if (!logged_in) {
         chrome.browserAction.setIcon({path: "images/lock_green.png"});
@@ -174,6 +177,9 @@ function set_logged_in() {
     }
 }
 
+/**
+ * Set the extension's state as not logged in
+ */
 function set_not_logged_in() {
     if (logged_in) {
         chrome.browserAction.setIcon({path: "images/lock_black.png"});
@@ -226,6 +232,7 @@ function delete_token() {
     set_not_logged_in();
 }
 
+// Implement Cookie with Secret at completion of each main frame request
 chrome.webRequest.onCompleted.addListener(function () {
     chrome.cookies.get({url: root_url, name: cookie_prefix + "sid"}, function (cookie) {
         if (cookie) {
@@ -239,6 +246,7 @@ chrome.webRequest.onCompleted.addListener(function () {
     types: ["main_frame"]
 });
 
+// Hash the URL and put it in header for better defense against MITM attack
 chrome.webRequest.onBeforeSendHeaders.addListener(function(details) {
     const secret = localStorage.getItem("secret");
     if (secret) {
