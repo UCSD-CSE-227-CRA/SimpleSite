@@ -199,7 +199,8 @@ function update_token() {
                 chrome.cookies.remove({url: root_url, name: cookie_prefix + "raw_token"});
                 const token = md5(secret + raw_token);
                 localStorage.setItem("token", token);
-                chrome.cookies.set({url: root_url, name: cookie_prefix + "token", value: md5(secret + raw_token)});
+                chrome.cookies.set({url: root_url, name: cookie_prefix + "token",
+                    value: md5(secret + raw_token), expirationDate: Date.now() / 1000 + 3600 * 24 * 7});
                 set_logged_in();
             } else {
                 console.error("No raw token found");
