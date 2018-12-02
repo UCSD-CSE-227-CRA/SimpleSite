@@ -23,27 +23,21 @@ function check_login($con) {
     if (mysqli_affected_rows($con) > 0) {
         $result = mysqli_fetch_array($result);
         $secret = $result['secret'];
+
         // Check whether the info and encrypted info is matched
         if (md5($secret . $token . $info) != $info_encrypted) {
             return -1;
         }
-        refresh_token($con, $result['sid'], $secret);
+
+        // Generate a new token for current session
+        $raw_token = random_string(32);
+        $token = md5($secret . $raw_token);
+        $con->query("UPDATE session SET token = '$token' WHERE sid = '$sid'");
+        check_sql_error($con);
+        $GLOBALS['raw_token'] = $raw_token;
+
         return $result["userid"];
     } else {
         return -1;
     }
-}
-
-/**
- * Generate a new session token according to session secret
- * @param mysqli $con Database connection
- * @param string $sid Session ID
- * @param string $secret Session secret
- */
-function refresh_token($con, $sid, $secret) {
-    $raw_token = random_string(32);
-    $token = md5($secret . $raw_token);
-    $con->query("UPDATE session SET token = '$token' WHERE sid = '$sid'");
-    check_sql_error($con);
-    $GLOBALS['raw_token'] = $raw_token;
 }
