@@ -5,7 +5,6 @@ $result = call_api("login");
 
 do_when_success($result, function ($data) {
     set_cookie('sid', $data['sid'], time() + 3600 * 24 * 7);
-    set_cookie('secret', $data['secret'], 0);
 });
 
 print_header("Log In Result");

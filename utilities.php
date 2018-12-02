@@ -87,8 +87,11 @@ function call_api($name, $params = null) {
 
     $result = json_decode($raw_result, true);
     do_when_success($result, function ($data) {
+        if ($data['secret']) {
+            header("Secret: " . $data['secret']);
+        }
         if ($data['raw_token']) {
-            set_cookie('raw_token', $data['raw_token'], 0);
+            header("Raw-Token: " . $data['raw_token']);
         }
     });
     return $result;

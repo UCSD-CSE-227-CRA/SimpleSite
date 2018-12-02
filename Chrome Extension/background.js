@@ -192,42 +192,29 @@ function set_not_logged_in() {
     }
 }
 
-/**
- * Store the raw token and secret (if exists) and remove them from cookie
- * @param raw_token The raw token
- */
-function store_token(raw_token) {
-    localStorage.setItem("raw_token", raw_token);
-    chrome.cookies.remove({url: root_url, name: cookie_prefix + "raw_token"});
-
-    chrome.cookies.get({url: root_url, name: cookie_prefix + "secret"}, function (cookie) {
-        if (!cookie && !localStorage.getItem("secret")) {
-            set_not_logged_in();
-            console.log("No secret found, user not logged in");
-            return;
-        }
-        if (cookie) {
-            localStorage.setItem("secret", cookie.value);
-            chrome.cookies.remove({url: root_url, name: cookie_prefix + "secret"});
-
-        }
-        set_logged_in();
-    });
-}
-
 // Grab and store cookie at completion of each main frame request
-chrome.webRequest.onCompleted.addListener(function () {
-    chrome.cookies.get({url: root_url, name: cookie_prefix + "raw_token"}, function (cookie) {
-        if (cookie) {
-            store_token(cookie.value);
-        } else {
-            set_not_logged_in();
+chrome.webRequest.onCompleted.addListener(function (details) {
+    let logged_in = false;
+    details.responseHeaders.forEach(function (header) {
+        if (header.name === "Secret") {
+            localStorage.setItem("secret", header.value);
+            logged_in = true;
+        }
+        if (header.name === "Raw-Token") {
+            localStorage.setItem("raw_token", header.value);
+            logged_in = true;
         }
     });
+
+    if (logged_in) {
+        set_logged_in();
+    } else {
+        set_not_logged_in()
+    }
 }, {
     urls: [root_url + "/*"],
     types: ["main_frame"]
-});
+}, ["responseHeaders"]);
 
 // Hash the URL and put it in header for better defense against MITM attack
 chrome.webRequest.onBeforeSendHeaders.addListener(function(details) {

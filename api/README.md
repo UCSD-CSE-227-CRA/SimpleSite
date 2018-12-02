@@ -57,7 +57,7 @@ These negative code values have fixed meaning:
 
 ### Parameters:
 
-* `sid` & `token`: Session ID and token, see log in section
+* `sid` & `token` & `info` & `info_encrypted`: See log in section
 
 ### Returns:
 
@@ -71,7 +71,7 @@ These negative code values have fixed meaning:
 
 ### Parameters:
 
-* `sid` & `token`: Session ID and token, see log in section
+* `sid` & `token` & `info` & `info_encrypted`: See log in section
 * `name`: Optional, default to view self
 
 ### Returns:
