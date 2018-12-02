@@ -182,6 +182,10 @@ function set_logged_in() {
  */
 function set_not_logged_in() {
     if (logged_in) {
+        localStorage.removeItem("secret");
+        localStorage.removeItem("raw_token");
+        chrome.cookies.remove({url: root_url, name: cookie_prefix + "sid"});
+
         chrome.browserAction.setIcon({path: "images/lock_black.png"});
         chrome.browserAction.setTitle({title: "You are not logged in"});
         logged_in = false;
@@ -189,59 +193,35 @@ function set_not_logged_in() {
 }
 
 /**
- * Update the next token according to raw token and secret
+ * Store the raw token and secret (if exists) and remove them from cookie
+ * @param raw_token The raw token
  */
-function update_token() {
-    function renew_token(secret) {
-        chrome.cookies.get({url: root_url, name: cookie_prefix + "raw_token"}, function (cookie) {
-            if (cookie) {
-                const raw_token = cookie.value;
-                chrome.cookies.remove({url: root_url, name: cookie_prefix + "raw_token"});
-                const token = md5(secret + raw_token);
-                localStorage.setItem("token", token);
-                chrome.cookies.set({url: root_url, name: cookie_prefix + "token",
-                    value: md5(secret + raw_token), expirationDate: Date.now() / 1000 + 3600 * 24 * 7});
-                set_logged_in();
-            } else {
-                console.error("No raw token found");
-                set_not_logged_in();
-            }
-        });
-    }
+function store_token(raw_token) {
+    localStorage.setItem("raw_token", raw_token);
+    chrome.cookies.remove({url: root_url, name: cookie_prefix + "raw_token"});
 
     chrome.cookies.get({url: root_url, name: cookie_prefix + "secret"}, function (cookie) {
+        if (!cookie && !localStorage.getItem("secret")) {
+            set_not_logged_in();
+            console.log("No secret found, user not logged in");
+            return;
+        }
         if (cookie) {
             localStorage.setItem("secret", cookie.value);
             chrome.cookies.remove({url: root_url, name: cookie_prefix + "secret"});
-            renew_token(cookie.value);
-        } else {
-            const secret = localStorage.getItem("secret");
-            if (secret) {
-                renew_token(secret);
-            } else {
-                set_not_logged_in();
-                console.log("No secret found, user not logged in");
-            }
+
         }
+        set_logged_in();
     });
 }
 
-/**
- * Delete cookie and local storage related to authentication. Use to log out
- */
-function delete_token() {
-    localStorage.removeItem("secret");
-    chrome.cookies.remove({url: root_url, name: cookie_prefix + "token"});
-    set_not_logged_in();
-}
-
-// Implement Cookie with Secret at completion of each main frame request
+// Grab and store cookie at completion of each main frame request
 chrome.webRequest.onCompleted.addListener(function () {
-    chrome.cookies.get({url: root_url, name: cookie_prefix + "sid"}, function (cookie) {
+    chrome.cookies.get({url: root_url, name: cookie_prefix + "raw_token"}, function (cookie) {
         if (cookie) {
-            update_token();
+            store_token(cookie.value);
         } else {
-            delete_token();
+            set_not_logged_in();
         }
     });
 }, {
@@ -252,9 +232,12 @@ chrome.webRequest.onCompleted.addListener(function () {
 // Hash the URL and put it in header for better defense against MITM attack
 chrome.webRequest.onBeforeSendHeaders.addListener(function(details) {
     const secret = localStorage.getItem("secret");
-    const token = localStorage.getItem("token");
-    if (secret && token) {
-        details.requestHeaders.push({name: "URL-Encrypted", value: md5(secret + token + details.url)});
+    const raw_token = localStorage.getItem("raw_token");
+    if (secret && secret.length > 0 && raw_token && raw_token.length > 0) {
+        const token = md5(secret + raw_token);
+        const encrypted_url = md5(secret + token + details.url);
+        details.requestHeaders.push({name: "Token", value: token});
+        details.requestHeaders.push({name: "URL-Encrypted", value: encrypted_url});
     }
     return {requestHeaders: details.requestHeaders};
 }, {

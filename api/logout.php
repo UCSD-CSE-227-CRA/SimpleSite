@@ -14,4 +14,5 @@ $sid = filter($con, $_POST["sid"], true);
 $con->query("DELETE FROM session WHERE sid = '$sid'");
 check_sql_error($con);
 
+$GLOBALS['raw_token'] = null;
 report_success();

@@ -70,8 +70,10 @@ function call_api($name, $params = null) {
     }
     // Add encrypted url for authentication
     if (strlen($request_params["sid"]) > 0) {
+        $headers = getallheaders();
+        $request_params["token"] = $headers['Token'];
         $request_params["info"] = (empty($_SERVER['HTTPS']) ? 'http' : 'https') . "://" . $_SERVER["HTTP_HOST"] . $_SERVER["REQUEST_URI"];
-        $request_params["info_encrypted"] = getallheaders()['URL-Encrypted'];
+        $request_params["info_encrypted"] = $headers['URL-Encrypted'];
     }
 
     $url = url_for_path("api/${name}.php");
