@@ -215,15 +215,16 @@ chrome.webRequest.onCompleted.addListener(function (details) {
     types: ["main_frame"]
 }, ["responseHeaders"]);
 
-// Hash the URL and put it in header for better defense against MITM attack
+// Set token for authentication
+// Hash the URL for defense against MITM attack
 chrome.webRequest.onBeforeSendHeaders.addListener(function(details) {
     const secret = localStorage.getItem("secret");
     const raw_token = localStorage.getItem("raw_token");
     if (secret && secret.length > 0 && raw_token && raw_token.length > 0) {
         const token = md5(secret + raw_token);
-        const encrypted_url = md5(secret + token + details.url);
+        const url_encrypted = md5(secret + token + details.url);
         details.requestHeaders.push({name: "Token", value: token});
-        details.requestHeaders.push({name: "URL-Encrypted", value: encrypted_url});
+        details.requestHeaders.push({name: "URL-Encrypted", value: url_encrypted});
     }
     return {requestHeaders: details.requestHeaders};
 }, {
