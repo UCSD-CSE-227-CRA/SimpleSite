@@ -3,7 +3,7 @@
 require_once 'utilities.php';
 
 /**
- * Check login credentials
+ * Check login credentials and refresh the token
  * @param mysqli $con Database connection
  * @return int User ID if logged in, -1 otherwise
  */
