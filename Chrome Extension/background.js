@@ -184,7 +184,6 @@ function set_not_logged_in() {
     if (logged_in) {
         localStorage.removeItem("secret");
         localStorage.removeItem("raw_token");
-        chrome.cookies.remove({url: root_url, name: cookie_prefix + "sid"});
 
         chrome.browserAction.setIcon({path: "images/lock_black.png"});
         chrome.browserAction.setTitle({title: "You are not logged in"});
@@ -192,7 +191,7 @@ function set_not_logged_in() {
     }
 }
 
-// Grab and store cookie at completion of each main frame request
+// Grab and store header at completion of each main frame request
 chrome.webRequest.onCompleted.addListener(function (details) {
     let logged_in = false;
     details.responseHeaders.forEach(function (header) {
@@ -212,7 +211,7 @@ chrome.webRequest.onCompleted.addListener(function (details) {
         set_not_logged_in()
     }
 }, {
-    urls: [root_url + "/*"],
+    urls: [root_url + "*"],
     types: ["main_frame"]
 }, ["responseHeaders"]);
 
@@ -228,6 +227,6 @@ chrome.webRequest.onBeforeSendHeaders.addListener(function(details) {
     }
     return {requestHeaders: details.requestHeaders};
 }, {
-    urls: [root_url + "/*"],
+    urls: [root_url + "*"],
     types: ["main_frame"]
 }, ["blocking", "requestHeaders"]);
