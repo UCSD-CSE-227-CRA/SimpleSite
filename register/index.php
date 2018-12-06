@@ -7,7 +7,7 @@ print_header("Register");
 <script>
     function do_submit() {
         let raw_password = document.getElementById("password").value;
-        document.getElementById("password").value = md5(raw_password);
+        document.getElementById("password").value = sha256(raw_password).toUpperCase();
     }
 </script>
 

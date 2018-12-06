@@ -9,11 +9,11 @@ require_once 'utilities.php';
  */
 function check_login($con) {
     $sid = filter($con, $_POST["sid"]);
-    $token = filter($con, $_POST["token"]);
+    $token = strtoupper(filter($con, $_POST["token"]));
     $info = filter($con, $_POST["info"]); // Correspond to "url" field in front end
-    $info_encrypted = filter($con, $_POST["info_encrypted"]); // Correspond to "url_encrypted" field in front end
-    if (strlen($sid) == 0 || !is_random_string($sid, 32) || !is_random_string($token, 32)
-        || strlen($info) == 0 || !is_random_string($info_encrypted, 32) || $info_encrypted === $token) {
+    $info_encrypted = strtoupper(filter($con, $_POST["info_encrypted"])); // Correspond to "url_encrypted" field in front end
+    if (strlen($sid) == 0 || !is_random_string($sid, 32) || !is_random_string($token, 64)
+        || strlen($info) == 0 || !is_random_string($info_encrypted, 64) || $info_encrypted === $token) {
         return -1;
     }
 
@@ -25,13 +25,13 @@ function check_login($con) {
         $secret = $result['secret'];
 
         // Check whether the info and encrypted info is matched
-        if (md5($secret . $token . $info) != $info_encrypted) {
+        if (sha256($secret . $token . $info) != $info_encrypted) {
             return -1;
         }
 
         // Generate a new token for current session
         $raw_token = random_string(32);
-        $token = md5($secret . $raw_token);
+        $token = sha256($secret . $raw_token);
         $con->query("UPDATE session SET token = '$token' WHERE sid = '$sid'");
         check_sql_error($con);
         $GLOBALS['raw_token'] = $raw_token;

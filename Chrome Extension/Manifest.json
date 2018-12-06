@@ -11,6 +11,7 @@
   "background":{
     "scripts":[
       "config.js",
+      "js-sha256.js",
       "background.js"
     ]
   },

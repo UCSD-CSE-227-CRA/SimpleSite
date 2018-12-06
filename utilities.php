@@ -29,14 +29,14 @@ $GLOBALS['urls'] = [
  * @param string $title
  */
 function print_header($title = "Simple Web") {
-    $utilities_path = url_for_path("utilities.js");
+    $sha256_path = url_for_path("js-sha256.js");
     $styles_path = url_for_path("styles.css");
     echo "<!DOCTYPE html>
 <html>
 <head>
     <meta http-equiv='Content-Type' content='text/html; charset=UTF-8'/>
     <title>${title}</title>
-    <script src=${utilities_path}></script>
+    <script src=${sha256_path}></script>
     <link rel='stylesheet' href=${styles_path}>
 </head>
 <body>";

@@ -6,6 +6,7 @@
 * In response data, field `code` equals 0 means request success, the data is in `data` field
 * In data field, if user is logged in, there will always be a `raw_token` field, see log in section
 * Otherwise (`code` != 0) there will be a corresponding `message` field
+* All sha256 result should be in upper case
 
 These negative code values have fixed meaning:
 
@@ -23,7 +24,7 @@ These negative code values have fixed meaning:
 ### Parameters:
 
 * `name`: User name, length between [3, 32]
-* `password`: MD5 encrypted user password
+* `password`: sha256 hashed user password
 * `sex`: User sex, can be 'male', 'female' or empty
 * `email`: User email
 
@@ -46,8 +47,8 @@ These negative code values have fixed meaning:
 
 * `sid`: Session ID, used for future authentication
 * `secret` & `raw_token`: Session secret and raw token. In the future:
-    * Set `token = MD5(secret + raw_token)` for authentication
-    * Set `info_encrypted = MD5(secret + token + info)` for authentication
+    * Set `token = sha256(secret + raw_token)` for authentication
+    * Set `info_encrypted = sha256(secret + token + info)` for authentication
 
 ## Log out
 

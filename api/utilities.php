@@ -78,13 +78,12 @@ function report_success($data = null) {
 }
 
 /**
- * Get the encrypted password from salt
- * @param string $password The password to convert
- * @param string $salt The password salt
- * @return string The converted password
+ * Get the sha256 hashed info in upper case
+ * @param string $info The info to hash
+ * @return string The hashed info
  */
-function md5_password($password, $salt) {
-    return strtoupper(md5(strtoupper($password) . $salt));
+function sha256($info) {
+    return strtoupper(hash("sha256", $info));
 }
 
 /**

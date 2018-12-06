@@ -13,11 +13,11 @@ function is_email($data) {
 $con = db_connect();
 
 $name = filter($con, $_POST["name"], true);
-$password = filter($con, $_POST["password"], true);
+$password = strtoupper(filter($con, $_POST["password"], true));
 $sex = filter($con, $_POST["sex"]);
 $email = filter($con, $_POST["email"], true);
 
-if (!is_random_string($password, 32)) {
+if (!is_random_string($password, 64)) {
     report_error(ERROR_ILLEGAL_PARAMETER);
 }
 
@@ -52,7 +52,7 @@ if (mysqli_affected_rows($con) > 0) {
 }
 
 $salt = random_string(6);
-$md5_password = md5_password($password, $salt);
-$con->query("INSERT INTO user (name, password, salt, sex, email) VALUES ('$name', '$md5_password', '$salt', '$sex', '$email')");
+$hashed_password = sha256($password . $salt);
+$con->query("INSERT INTO user (name, password, salt, sex, email) VALUES ('$name', '$hashed_password', '$salt', '$sex', '$email')");
 check_sql_error($con);
 report_success();
