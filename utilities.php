@@ -48,8 +48,7 @@ function print_header($title = "Simple Web") {
  */
 function print_footer() {
     echo "</body>
-</html>
-";
+</html>";
 }
 
 /**
